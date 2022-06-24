@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+	      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<title>Store Page</title>
+	<style>
+
+
+	.btn-a{
+		background: none;
+		border: none;
+		padding: 0;
+		color: #57557A;
+		font-weight: 600;
+		font-size: 18px;
+
+	}
+	.btn-as{
+		background: none;
+		border: none;
+		padding: 0;
+		color: #57557A;
+		font-weight: 600;
+		font-size: 15px;
+	}
+    .btn-primary {
+        background: linear-gradient(135deg, rgba(176, 106, 252, 1) 39%, rgba(116, 17, 255, 1) 101%);
+        border: none;
+        border-radius: 50px
+    }
+    .btn-secondary {
+        background: #a6a6a6;
+        border: none;
+        border-radius: 50px
+    }
+    .wrapper {
+    display: flex;
+    align-items: stretch
+	}
+
+	#sidebar {
+	    min-width: 250px;
+	    max-width: 250px;
+        min-height: 100vh;
+	}
+
+	#sidebar.active {
+	    margin-left: -250px;
+	}
+	a{color: #57557A;}
+
+</style>
+</head>
+
+<!-- header from https://mdbootstrap.com/docs/standard/navigation/headers/#section-introduction -->
+<header style="background-color:#212042">
+	<!-- Navbar -->
+	<nav class="navbar navbar-expand-lg navbar-dark" >
+		<div class="container-fluid">
+			<div class="collapse navbar-collapse" id="navbarExample01">
+				<h3 class="mx-3" style="color:#EDE6F3"> NittanyMarket </h3>
+				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+					<li class="nav-item active">
+						<a class="nav-link" aria-current="page" href="#">Home</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/settings">User Settings</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/publish">Publish</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/listing">Listing</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/">Log Out</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+</header>
+
+
+<!-- template from https://bbbootstrap.com/snippets/bootstrap-ecommerce-category-product-list-page-93685579 -->
+<body style="background: #57557A;">
+<div class="wrapper" >
+    <!-- Bootstrap Sidebar from https://bootstrapious.com/p/bootstrap-sidebar -->
+    <nav id="sidebar" style="background-color:white">
+        <div class="sidebar-header" >
+	        <div class="mx-4 my-2">
+	            <h3>Category</h3>
+	            <p>Choose a category below</p>
+		        <hr color="black">
+
+		        <button class="btn-a text-left" ><a href="/category">All</a></button>
+	        </div>
+        </div>
+        <ul class="my-2" style="list-style-type:none;">
+	        {% for root, subcategory in categories.items() %}
+            <li class="active" style="text-align:left">
+                <form action="/category" method="POST">
+	                <button class="btn-a text-left" type="submit" name="category" value="{{root}}">{{root}}</button>
+	                <a href="#{{root.replace(' ', '_').replace(',', '_').replace('&', '_')}}" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"></a>
+                </form>
+
+                <ul class="collapse" id="{{root.replace(' ', '_').replace(',', '_').replace('&', '_')}}" style="list-style-type:none;font-weight: 600; font-size: 15px;">
+	                {% for subcat, sscat in subcategory.items() %}
+                    <li>
+	                    {% if sscat %}
+		                <form action="/category" method="POST">
+			                <button class="btn-as text-left" type="submit" name="category" value="{{subcat}}">{{subcat}}</button>
+                            <a href="#{{subcat.replace(' ', '_').replace(',', '_').replace('&', '_')}}" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"></a>
+		                </form>
+                        <ul class="collapse" id="{{subcat.replace(' ', '_').replace(',', '_').replace('&', '_')}}" style="list-style-type:none;">
+	                        {% for subsubcat in sscat %}
+		                    <li>
+			                    <form action="/category" method="POST">
+			                    <button class="btn-as text-left" type="submit" name="category" value="{{subsubcat}}">{{subsubcat}}</button>
+			                    </form>
+		                    </li>
+	                        {% endfor %}
+		                </ul>
+	                    {% else %}
+	                    <a href="/category" type="submit" name="category" value="{{subcat}}">{{subcat}}</a>
+	                    {% endif %}
+                    </li>
+	                {% endfor %}
+                </ul>
+            </li>
+	        {% endfor %}
+        </ul>
+    </nav>
+
+<div class="container mx-5 mt-5 mb-5">
+	<div class="row d-flex justify-items-center">
+		{% if products %}
+		{% for product in products %}
+		{% if product[8] == 0 %}
+		<div class="col-6 my-2">
+		<div class="col-md-12 bg-white border rounded d-flex  px-3 py-4">
+			<div class="col-md-8">
+				<h5>{{product[3]}}</h5>
+				<hr>
+				<h6> {{product[4]}} </h6>
+				<p class="text-justify text-truncate para mb-0">
+					{{product[5]}}
+				</p>
+			</div>
+			<div class="col-md-4 border-left">
+				<div class="align-items-center">
+					<h5 class="mr-1 success">{{product[6]}}</h5>
+				</div>
+
+					<p> Quantity: {{product[7]}}</p>
+				<div class="d-flex mt-4">
+					<form action="/product" method="POST">
+						<input hidden value="{{product[2]}}" name="category">
+						<input hidden value="{{product[0]}}" name="seller">
+						<input hidden value="{{product[1]}}" name="lid">
+						<button class="btn btn-primary btn-sm" type="submit" >Details</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		</div>
+		{% endif %}
+		{% endfor %}
+		{% endif %}
+	</div>
+
+	{% if products %}
+	{% else %}
+	<div class="d-flex center-align justify-content-center" style="margin-top:10em">
+		<h4> No Products Available</h4>
+	</div>
+	{% endif %}
+</div>
+</div>
+</body>
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<title>Settings</title>
+	<style>
+    body { background-color: #19123B}
+      .card {
+        border: none;
+        border-top: 5px solid rgb(176, 106, 252);
+        background: #212042;
+        color: #57557A
+      }
+    p { font-weight: 600; font-size: 15px}
+      .fab {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: none;
+        background: #2A284D;
+        height: 40px;
+        width: 90px
+      }
+    .myform {
+        padding: 0 25px 0 33px
+    }
+    .form-control {
+        border: 1px solid #57557A;
+        border-radius: 3px;
+        background: #212042;
+        margin-bottom: 20px;
+        letter-spacing: 1px
+    }
+    .form-control:focus {
+        border: 1px solid #57557A;
+        border-radius: 3px;
+        box-shadow: none;
+        background: #212042;
+        color: #fff;
+        letter-spacing: 1px
+    }
+    .form-control:disabled {
+        border: 1px solid #57557A;
+        border-radius: 3px;
+        box-shadow: none;
+        background: #161526;
+        color: #fff;
+        letter-spacing: 1px
+    }
+    .btn-primary {
+        background: linear-gradient(135deg, rgba(176, 106, 252, 1) 39%, rgba(116, 17, 255, 1) 101%);
+        border: none;
+        border-radius: 50px
+    }
+    .btn-secondary {
+        background: #a6a6a6;
+        border: none;
+        border-radius: 50px
+    }
+    h5{color:white}
+    h6{color:white}
+    small { color: #F2CEFF}
+    </style>
+</head>
+
+<!-- template from https://www.bootdey.com/snippets/view/dark-profile-settings -->
+
+<body style = "margin-top:5em; color: #bcd0f7; background: #19123B;">
+
+<div class="container">
+	<div class="row gutters my-3">
+
+		<div class="col-12" align="center">
+		<!-- Flask Flash code snippet from https://www.codegrepper.com/code-examples/python/flask+alert+popup -->
+		{% with messages = get_flashed_messages(with_categories=true) %}
+			{% if messages %}
+				{% for category, message in messages %}
+				<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+				<span>{{ message }}</span>
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">×</span>
+				</button>
+				</div>
+				{% endfor %}
+			{% endif %}
+		{% endwith %}
+		</div>
+
+		<div class="col-xl-12 my-3" align="center">
+			<a href="/category" > <button class="btn btn-primary" style="min-width:50em;">Go Back To Store</button> </a>
+		</div>
+
+		<div class="col-xl-12 col-lg-9 col-md-12 col-sm-12 col-12">
+			<div class="card h-100">
+				<div class="card-body">
+					<form class="row gutters" action="/publish" method="POST">
+						<div class="col-6">
+							<h5 class="user-name">{{userinfo['first_name']}} {{userinfo['last_name']}}</h5>
+							<h6 class="user-email">{{userinfo['email']}}</h6>
+						</div>
+						<div class="col-6">
+							<p>
+								{% if is_seller %}
+								Page to publish a product, enter all the required information down below.
+								{% else %}
+								You must be a seller to publish a product.
+								{% endif %}
+							</p>
+						</div>
+						{% if is_seller %}
+						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+							<h6 class="mb-3 text-white">Product Details</h6>
+						</div>
+						<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+							<div class="form-group">
+								<label for="email">Email</label>
+								<input type="text" class="form-control" id="email" disabled placeholder="{{userinfo['email']}}">
+							</div>
+						</div>
+						<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+							<div class="form-group">
+								<label for="cat">Category</label>
+								<input type="text" class="form-control" id="cat" name="category" placeholder="Enter Category" required>
+							</div>
+						</div>
+						<div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
+							<div class="form-group">
+								<label for="price">Price</label>
+								<input type="text" class="form-control" id="price" name="price" placeholder="Enter Price of Product" required>
+							</div>
+						</div>
+
+						<div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12">
+							<div class="form-group">
+								<label for="q">Quantity</label>
+								<input type="text" class="form-control" id="q" name="quantity" placeholder=" Enter Quantity" required>
+							</div>
+						</div>
+
+						<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+							<div class="form-group">
+								<label for="t">Title</label>
+								<input type="text" class="form-control" id="t" name="title" placeholder="Enter Title" required>
+							</div>
+						</div>
+
+						<div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
+							<div class="form-group">
+								<label for="name">Product Name</label>
+								<input type="text" class="form-control" id="name" name="name" placeholder="Enter Name of Product" required>
+							</div>
+						</div>
+
+						<div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
+							<div class="form-group">
+								<label for="desc">Product Description</label>
+								<textarea type="text" rows="3" class="form-control" id="desc" name="desc" required>
+
+								</textarea>
+							</div>
+						</div>
+						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+							<div class="text-right">
+								<button type="submit"  class="btn btn-primary">Publish Product</button>
+							</div>
+						</div>
+						{% endif %}
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+</html>
